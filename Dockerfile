@@ -4,7 +4,7 @@ RUN apt-get update -y && apt-get install -y \
     zlib1g-dev \
     cmake \
     git \
-    gcc-6 \
+    gcc \
     subversion \
     curl \
     unzip \
