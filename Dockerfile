@@ -1,13 +1,12 @@
 FROM debian:stable-slim
 RUN apt-get update -y && apt-get install -y \
+    bison \
     build-essential \
-    zlib1g-dev \
     cmake \
-    git \
-    gcc \
-    subversion \
     curl \
-    unzip \
     flex \
-    bison
-
+    gcc \
+    git \
+    subversion \
+    unzip \
+    zlib1g-dev
