@@ -1,6 +1,6 @@
 FROM alpine:latest
 RUN apk add --no-cache \
-    clang \
+    g++ \
     cmake \
     curl \
     git \
