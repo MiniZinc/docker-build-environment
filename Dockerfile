@@ -4,6 +4,7 @@ RUN apk add --no-cache \
     cmake \
     curl \
     git \
+    make \
     subversion \
     unzip \
     zlib
