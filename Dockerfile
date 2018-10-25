@@ -1,9 +1,10 @@
 FROM alpine:latest
 RUN apk add --no-cache \
-    g++ \
+    bash \
     cmake \
     curl \
     git \
+    g++ \
     make \
     subversion \
     unzip \
