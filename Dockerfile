@@ -6,6 +6,7 @@ RUN apk add --no-cache \
     git \
     g++ \
     make \
+    perl \
     subversion \
     unzip \
     zlib
