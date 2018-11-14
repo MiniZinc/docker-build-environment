@@ -9,4 +9,4 @@ RUN apk add --no-cache \
     perl \
     subversion \
     unzip \
-    zlib
+    zlib-dev
