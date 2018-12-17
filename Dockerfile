@@ -8,6 +8,7 @@ RUN apt-get update -y && apt-get install -y \
     flex \
     gcc \
     git \
+    ninja-build \
     subversion \
     unzip \
     zlib1g-dev
