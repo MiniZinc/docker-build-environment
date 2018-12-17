@@ -9,6 +9,7 @@ RUN apk add --no-cache \
     git \
     g++ \
     make \
+    ninja \
     perl \
     subversion \
     unzip \
