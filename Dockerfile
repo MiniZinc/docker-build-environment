@@ -1,4 +1,4 @@
-FROM debian:stable-slim
+FROM ubuntu:latest
 RUN apt-get update -y && apt-get install -y \
     bison \
     build-essential \
