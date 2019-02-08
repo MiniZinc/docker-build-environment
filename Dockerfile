@@ -1,14 +1,14 @@
-FROM ubuntu:latest
-RUN apt-get update -y && apt-get install -y \
+FROM centos/devtoolset-7-toolchain-centos7
+
+USER 0
+RUN yum install -y epel-release && yum install -y \
     bison \
-    build-essential \
     ccache \
-    cmake \
-    curl \
+    cmake3 \
     flex \
-    gcc \
     git \
     ninja-build \
-    subversion \
-    unzip \
-    zlib1g-dev
+    subversion && yum clean all -y && rm -rf /var/cache/yum
+
+RUN ln -s /usr/bin/cmake3 /usr/bin/cmake
+USER 1001
