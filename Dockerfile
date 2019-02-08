@@ -1,17 +1,14 @@
-FROM ubuntu:bionic
-RUN apt-get update -y && apt-get install -y \
-    build-essential \
-    cmake \
-    curl \
-    gcc \
+FROM centos/devtoolset-7-toolchain-centos7
+
+USER 0
+RUN yum install -y --setopt=tsflags=nodocs epel-release && yum install -y --setopt=tsflags=nodocs \
+    cmake3 \
     git \
-    libglu1-mesa-dev \
-    mesa-common-dev \
     ninja-build \
-    qt5-default \
-    qtwebengine5-dev \
-    libqt5svg5-dev \
-    unzip
+    qt5-qtbase-devel \
+    subversion && yum clean all -y && rm -rf /var/cache/yum
+
+RUN ln -s /usr/bin/cmake3 /usr/bin/cmake
 
 # Linux deploy QT script
 ADD https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage /opt/linuxdeployqt.AppImage
@@ -19,3 +16,5 @@ RUN chmod +x /opt/linuxdeployqt.AppImage
 RUN /opt/linuxdeployqt.AppImage --appimage-extract
 RUN rm -rf /opt/linuxdeployqt.AppImage
 ENV PATH=/squashfs-root/usr/bin:$PATH
+
+USER 1001
