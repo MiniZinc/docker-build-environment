@@ -9,7 +9,8 @@ RUN yum install -y epel-release && yum install -y \
     git \
     make \
     ninja-build \
-    subversion && yum clean all -y && rm -rf /var/cache/yum
+    subversion \
+    zlib-devel && yum clean all -y && rm -rf /var/cache/yum
 
 RUN ln -s /usr/bin/cmake3 /usr/bin/cmake
 USER 1001
