@@ -9,6 +9,7 @@ RUN yum install -y --setopt=tsflags=nodocs epel-release && yum install -y --seto
     subversion && yum clean all -y && rm -rf /var/cache/yum
 
 RUN ln -s /usr/bin/cmake3 /usr/bin/cmake
+RUN ln -s /usr/bin/qmake-qt5 /usr/bin/qmake
 
 # Linux deploy QT script
 ADD https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage /opt/linuxdeployqt.AppImage
