@@ -7,6 +7,7 @@ RUN yum install -y epel-release && yum install -y \
     cmake3 \
     flex \
     git \
+    make \
     ninja-build \
     subversion && yum clean all -y && rm -rf /var/cache/yum
 
