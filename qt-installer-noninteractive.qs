@@ -22,8 +22,7 @@ Controller.prototype.IntroductionPageCallback = function() {
 
 Controller.prototype.TargetDirectoryPageCallback = function()
 {
-    // gui.currentPageWidget().TargetDirectoryLineEdit.setText(installer.value("HomeDir") + "/Qt");
-    gui.currentPageWidget().TargetDirectoryLineEdit.setText("/qt");
+    gui.currentPageWidget().TargetDirectoryLineEdit.setText("/qt-install");
     gui.clickButton(buttons.NextButton);
 }
 
@@ -31,20 +30,8 @@ Controller.prototype.ComponentSelectionPageCallback = function() {
     var widget = gui.currentPageWidget();
 
     widget.deselectAll();
-    widget.selectComponent("qt.597.gcc_64");
-    widget.selectComponent("qt.597.qtwebengine")
-
-    // widget.selectComponent("qt.59.qtquickcontrols");
-    // widget.deselectComponent("qt.tools.qtcreator");
-    // widget.deselectComponent("qt.55.qt3d");
-    // widget.deselectComponent("qt.55.qtcanvas3d");
-    // widget.deselectComponent("qt.55.qtlocation");
-    // widget.deselectComponent("qt.55.qtquick1");
-    // widget.deselectComponent("qt.55.qtscript");
-    // widget.deselectComponent("qt.55.qtwebengine");
-    // widget.deselectComponent("qt.extras");
-    // widget.deselectComponent("qt.tools.doc");
-    // widget.deselectComponent("qt.tools.examples");
+    widget.selectComponent("qt.qt5.597.gcc_64");
+    widget.selectComponent("qt.qt5.597.qtwebengine");
 
     gui.clickButton(buttons.NextButton);
 }
