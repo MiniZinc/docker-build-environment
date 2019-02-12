@@ -61,5 +61,3 @@ COPY --from=WORKING /qt /qt
 ENV PATH=/qt/bin:$PATH
 COPY --from=WORKING /linuxdeployqt /linuxdeployqt
 ENV PATH=/linuxdeployqt/bin:$PATH
-
-USER 1001
