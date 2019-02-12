@@ -13,4 +13,3 @@ RUN yum install -y --setopt=tsflags=nodocs epel-release && yum install -y  --set
     zlib-devel && yum clean all -y && rm -rf /var/cache/yum
 
 RUN ln -s /usr/bin/cmake3 /usr/bin/cmake
-USER 1001
