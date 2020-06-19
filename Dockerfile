@@ -1,15 +1,14 @@
-FROM centos/devtoolset-7-toolchain-centos7
+FROM debian:stable-slim
 
-USER 0
-RUN yum install -y --setopt=tsflags=nodocs epel-release && yum install -y  --setopt=tsflags=nodocs \
+RUN apt-get update -y && apt-get install -y \
     bison \
+    build-essential \
     ccache \
-    cmake3 \
+    cmake \
+    curl \
     flex \
     git \
-    make \
     ninja-build \
     subversion \
-    zlib-devel && yum clean all -y && rm -rf /var/cache/yum
-
-RUN ln -s /usr/bin/cmake3 /usr/bin/cmake
+    unzip \
+    zlib1g-dev
