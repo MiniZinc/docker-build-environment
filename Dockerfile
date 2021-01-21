@@ -15,12 +15,14 @@ RUN apt-get update -y && apt-get install -y \
     build-essential \
     ccache \
     cmake \
+    curl \
     flex \
     git \
     ninja-build \
     perl \
     qt5-default \
     qtwebengine5-dev \
+    unzip \
     zlib1g-dev
 
 COPY --from=EXTRACT /linuxdeployqt /linuxdeployqt
