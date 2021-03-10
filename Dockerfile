@@ -27,6 +27,9 @@ RUN apt-get update -y && apt-get install -y \
     libgl1-mesa-dev \
     libgtk-3-dev \
     libnss3 \
+    libodbc1 \
+    libpq5 \
+    libxkbcommon-x11-0 \
     ninja-build \
     perl \
     unzip \
