@@ -1,5 +1,7 @@
-FROM debian:oldstable-slim AS EXTRACT
 ARG QT_VERSION=5.12.9
+
+FROM debian:oldstable-slim AS EXTRACT
+ARG QT_VERSION
 
 ### Linux deploy QT script
 ADD https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage /opt/linuxdeployqt.AppImage
@@ -13,7 +15,7 @@ RUN pip3 install aqtinstall
 RUN aqt install -O /qt $QT_VERSION linux desktop -m qtwebengine
 
 FROM debian:oldstable-slim
-ARG QT_VERSION=5.12.9
+ARG QT_VERSION
 
 RUN apt-get update -y && apt-get install -y \
     bison \
