@@ -4,7 +4,7 @@ on:
   schedule:
     - cron: '0 0 * * 1'
   push:
-    branches: ['clang-format']
+    branches: ['clang-tools']
 
 env:
   REGISTRY: ghcr.io
