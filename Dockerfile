@@ -1,4 +1,4 @@
-FROM debian:stable-slim
+FROM ubuntu:18.04
 
 RUN apt-get update -y && apt-get install -y \
     bison \
@@ -11,4 +11,5 @@ RUN apt-get update -y && apt-get install -y \
     ninja-build \
     subversion \
     unzip \
-    zlib1g-dev
+    zlib1g-dev \
+		&& rm -rf /var/lib/apt/lists/*
