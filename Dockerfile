@@ -1,6 +1,7 @@
 # See https://snapcraft.io/docs/build-on-docker
+ARG BASE="ubuntu:18.04"
 
-FROM ubuntu:bionic as builder
+FROM $BASE as builder
 
 # Grab dependencies
 RUN apt update
@@ -35,7 +36,7 @@ RUN chmod +x /snap/bin/snapcraft
 
 # Multi-stage build, only need the snaps from the builder. Copy them one at a
 # time so they can be cached.
-FROM ubuntu:bionic
+FROM $BASE
 COPY --from=builder /snap/core /snap/core
 COPY --from=builder /snap/core18 /snap/core18
 COPY --from=builder /snap/snapcraft /snap/snapcraft
