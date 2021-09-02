@@ -1,6 +1,7 @@
 ARG QT_VERSION=5.12.9
+ARG BASE="ubuntu:18.04"
 
-FROM debian:oldstable-slim AS EXTRACT
+FROM $BASE AS EXTRACT
 ARG QT_VERSION
 
 ### Linux deploy QT script
@@ -14,7 +15,7 @@ RUN apt-get update -y && apt-get install -y python3 python3-pip
 RUN pip3 install aqtinstall
 RUN aqt install -O /qt $QT_VERSION linux desktop -m qtwebengine
 
-FROM debian:oldstable-slim
+FROM $BASE 
 ARG QT_VERSION
 
 RUN apt-get update -y && apt-get install -y \
@@ -35,7 +36,8 @@ RUN apt-get update -y && apt-get install -y \
     ninja-build \
     perl \
     unzip \
-    zlib1g-dev
+    zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY --from=EXTRACT /linuxdeployqt /linuxdeployqt
 COPY --from=EXTRACT /qt /qt
