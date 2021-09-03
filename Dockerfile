@@ -10,6 +10,7 @@ RUN yum install -y epel-release centos-release-scl-rh && yum install -y \
 	cups-libs \
 	devtoolset-10-gcc \
 	devtoolset-10-gcc-c++ \
+	file \
 	git \
 # Qt Requirement:
 	fontconfig \
