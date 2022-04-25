@@ -11,7 +11,6 @@ RUN apk add --no-cache \
 	git \
 	g++ \
 	ninja \
-	python2 \
 	unzip \
 	zlib-dev
 
