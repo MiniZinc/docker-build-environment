@@ -1,19 +1,20 @@
-FROM centos:7
+FROM rockylinux/rockylinux:8
 
-RUN yum install -y epel-release centos-release-scl-rh && yum install -y \
+# install epel-release for ccache
+RUN dnf install -y epel-release && \
+	dnf install --enablerepo=powertools -y \
 	bison \
 	ccache \
-	cmake3 \
-	devtoolset-10-gcc \
-	devtoolset-10-gcc-c++ \
+	cmake \
+	gcc-toolset-12 \
+	gcc-toolset-12-gcc-c++ \
 	flex \
 	git \
 	make \
 	ninja-build \
 	subversion \
 	unzip \
-	zlib-devel && yum clean all -y && rm -rf /var/cache/yum
-RUN ln -s /usr/bin/cmake3 /usr/bin/cmake
-ENV BASH_ENV=/opt/rh/devtoolset-10/enable \
-	ENV=/opt/rh/devtoolset-10/enable \
-	PROMPT_COMMAND=". /opt/rh/devtoolset-10/enable"
+	zlib-devel && dnf clean all -y && rm -rf /var/cache/dnf
+ENV BASH_ENV=/opt/rh/gcc-toolset-12/enable \
+	ENV=/opt/rh/gcc-toolset-12/enable \
+	PROMPT_COMMAND=". /opt/rh/gcc-toolset-12/enable"
