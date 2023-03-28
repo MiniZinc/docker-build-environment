@@ -1,4 +1,4 @@
-ARG QT_VERSION=6.2.6
+ARG QT_VERSION=6.2.4
 
 FROM rockylinux/rockylinux:8 AS base 
 
@@ -41,7 +41,7 @@ FROM base AS extract
 ARG QT_VERSION
 
 ### Linux deploy QT script
-ADD https://github.com/probonopd/linuxdeployqt/releases/download/7/linuxdeployqt-7-x86_64.AppImage /opt/linuxdeployqt.AppImage
+ADD https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage /opt/linuxdeployqt.AppImage
 RUN chmod +x /opt/linuxdeployqt.AppImage
 RUN /opt/linuxdeployqt.AppImage --appimage-extract
 RUN rm -rf /opt/linuxdeployqt.AppImage
@@ -50,9 +50,9 @@ RUN chmod -R 755 /linuxdeployqt
 
 ### Install Qt using aqt installer
 RUN dnf install -y \
-	python3 \
-	python3-devel \
-	python3-pip && dnf clean all -y && rm -rf /var/cache/dnf
+	python39 \
+	python39-devel \
+	python39-pip && dnf clean all -y && rm -rf /var/cache/dnf
 RUN pip3 install -U setuptools wheel
 RUN source /opt/rh/gcc-toolset-12/enable && pip3 install aqtinstall
 RUN aqt install -O /qt $QT_VERSION linux desktop -m qtwebsockets
