@@ -28,6 +28,18 @@ RUN dnf install --enablerepo=powertools -y \
 	libXtst-devel \
 # Qt Requirement:
 	mesa-libGL-devel \
+# Qt Requirement:
+	mysql-libs \
+# Qt Requirement:
+	postgresql-odbc \
+# Qt Requirement:
+	xcb-util-image \
+# Qt Requirement:
+	xcb-util-keysyms \
+# Qt Requirement:
+	xcb-util-renderutil \
+# Qt Requirement:
+	xcb-util-wm \
 	make \
 	ninja-build \
 	perl \
