@@ -40,13 +40,21 @@ ENV BASH_ENV=/opt/rh/gcc-toolset-12/enable \
 FROM base AS extract 
 ARG QT_VERSION
 
-### Linux deploy QT script
-ADD https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage /opt/linuxdeployqt.AppImage
-RUN chmod +x /opt/linuxdeployqt.AppImage
-RUN /opt/linuxdeployqt.AppImage --appimage-extract
-RUN rm -rf /opt/linuxdeployqt.AppImage
-RUN mv /squashfs-root/usr /linuxdeployqt && rm -rf /squashfs-root/
-RUN chmod -R 755 /linuxdeployqt
+### Linux deploy script
+ADD https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage /opt/linuxdeploy.AppImage
+RUN chmod +x /opt/linuxdeploy.AppImage
+RUN /opt/linuxdeploy.AppImage --appimage-extract
+RUN rm -rf /opt/linuxdeploy.AppImage
+RUN mv /squashfs-root/usr /linuxdeploy && rm -rf /squashfs-root/
+RUN chmod -R 755 /linuxdeploy
+
+# Linux deploy Qt plugin
+ADD https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage /opt/linuxdeploy-plugin-qt.AppImage
+RUN chmod +x /opt/linuxdeploy-plugin-qt.AppImage
+RUN /opt/linuxdeploy-plugin-qt.AppImage --appimage-extract
+RUN rm -rf /opt/linuxdeploy-plugin-qt.AppImage
+RUN mv /squashfs-root/usr /linuxdeploy-plugin-qt && rm -rf /squashfs-root/
+RUN chmod -R 755 /linuxdeploy-plugin-qt
 
 ### Install Qt using aqt installer
 RUN dnf install -y \
@@ -60,9 +68,9 @@ RUN aqt install -O /qt $QT_VERSION linux desktop -m qtwebsockets
 FROM base
 ARG QT_VERSION
 
-COPY --from=extract /linuxdeployqt /linuxdeployqt
+COPY --from=extract /linuxdeploy /linuxdeploy
 COPY --from=extract /qt /qt
 
 ENV QTDIR=/qt/$QT_VERSION/gcc_64
-ENV PATH=$QTDIR/bin:/linuxdeployqt/bin:$PATH
+ENV PATH=$QTDIR/bin:/linuxdeploy/bin:/linuxdeploy-plugin-qt/bin:$PATH
 ENV QT_PLUGIN_PATH=$QTDIR/plugins
