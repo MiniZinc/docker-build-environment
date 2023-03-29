@@ -8,6 +8,7 @@ RUN dnf install -y epel-release && \
 	cmake \
 	gcc-toolset-12 \
 	gcc-toolset-12-gcc-c++ \
+	findutils \
 	flex \
 	git \
 	make \
