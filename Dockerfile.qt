@@ -74,3 +74,4 @@ COPY --from=extract /qt /qt
 ENV QTDIR=/qt/$QT_VERSION/gcc_64
 ENV PATH=$QTDIR/bin:/linuxdeploy/bin:/linuxdeploy-plugin-qt/bin:$PATH
 ENV QT_PLUGIN_PATH=$QTDIR/plugins
+ENV LD_LIBRARY_PATH=/qt/$QT_VERSION/gcc_64/lib:$LD_LIBRARY_PATH
