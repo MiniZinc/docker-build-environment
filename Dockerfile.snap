@@ -40,12 +40,17 @@ RUN snap_version="$(awk '/^version:/{print $2}' /snap/snapcraft/current/meta/sna
 RUN echo 'exec "$SNAP/usr/bin/python3" "$SNAP/bin/snapcraft" "$@"' >> /snap/bin/snapcraft
 RUN chmod +x /snap/bin/snapcraft
 
+# Workaround for old buggy version of patchelf
+ADD https://github.com/NixOS/patchelf/releases/download/0.17.2/patchelf-0.17.2-x86_64.tar.gz /opt/patchelf/patchelf.tar.gz
+RUN cd /opt/patchelf && tar -xvf patchelf.tar.gz
+
 # Multi-stage build, only need the snaps from the builder. Copy them one at a
 # time so they can be cached.
 FROM ubuntu:$UBUNTU
 COPY --from=builder /snap/core20 /snap/core20
 COPY --from=builder /snap/snapcraft /snap/snapcraft
 COPY --from=builder /snap/bin/snapcraft /snap/bin/snapcraft
+COPY --from=builder /opt/patchelf/bin/patchelf /snap/snapcraft/current/bin
 
 # Generate locale and install dependencies.
 RUN apt-get update && apt-get dist-upgrade --yes && apt-get install --yes snapd sudo locales && locale-gen en_US.UTF-8 && \
