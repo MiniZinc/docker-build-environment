@@ -2,7 +2,8 @@ ARG QT_VERSION=6.5.1
 
 FROM rockylinux/rockylinux:8 AS base 
 
-RUN dnf install --enablerepo=powertools -y \
+RUN dnf install -y epel-release && \
+	dnf install --enablerepo=powertools -y \
 # Qt Requirement:
 	alsa-lib \
 	cmake \
@@ -32,6 +33,8 @@ RUN dnf install --enablerepo=powertools -y \
 	mysql-libs \
 # Qt Requirement:
 	postgresql-odbc \
+# Qt Requirement:
+	xcb-util-cursor \
 # Qt Requirement:
 	xcb-util-image \
 # Qt Requirement:
