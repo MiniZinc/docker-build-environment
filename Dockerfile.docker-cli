@@ -1,5 +1,5 @@
-FROM alpine:latest
+FROM docker:cli
 
-RUN apk --no-cache add docker curl bash
+RUN apk --no-cache add curl bash
 
 CMD ["/bin/bash"]
