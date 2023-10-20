@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        tag: ["alpine", "clang-tools", "cpp", "package", "qt", "snap", "docker-cli"]
+        tag: ["alpine", "clang-tools", "cpp", "package", "qt", "snap", "docker-cli", "sphinx"]
     permissions:
       contents: read
       packages: write
