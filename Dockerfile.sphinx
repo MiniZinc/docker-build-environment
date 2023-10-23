@@ -20,4 +20,6 @@ RUN apt-get update && \
         texlive-xetex \
         tzdata \
         xindy && \
-    pip3 install six sphinx_rtd_theme
+    pip3 install six sphinx_rtd_theme && \
+    echo "<?xml version='1.0'?><!DOCTYPE fontconfig SYSTEM 'fonts.dtd'><fontconfig><dir>/usr/share/texlive/texmf-dist/fonts/opentype</dir></fontconfig>" > /etc/fonts/conf.d/09-texlive-fonts-extra.conf && \
+    fc-cache
