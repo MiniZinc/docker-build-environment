@@ -84,8 +84,8 @@ RUN dnf install -y \
 	python39 \
 	python39-devel \
 	python39-pip && dnf clean all -y && rm -rf /var/cache/dnf
-RUN pip3 install -U setuptools wheel
-RUN source /opt/rh/gcc-toolset-12/enable && pip3 install aqtinstall
+RUN pip3.9 install -U setuptools wheel
+RUN source /opt/rh/gcc-toolset-12/enable && pip3.9 install aqtinstall
 RUN aqt install-qt -O /qt linux desktop $QT_VERSION -m qtwebsockets
 
 FROM base
