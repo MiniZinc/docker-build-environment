@@ -3,6 +3,7 @@ RUN apk add --no-cache \
     binutils \
     curl \
     git \
+    github-cli \
     patchelf \
     tzdata \
     unzip
