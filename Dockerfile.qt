@@ -6,6 +6,7 @@ RUN dnf install -y epel-release && \
 	dnf install --enablerepo=powertools -y \
 # Qt Requirement:
 	alsa-lib \
+	ccache \
 	cmake \
 # Qt Requirement:
 	cups-libs \
