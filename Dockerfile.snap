@@ -41,9 +41,9 @@ RUN echo 'exec "$SNAP/usr/bin/python3" "$SNAP/bin/snapcraft" "$@"' >> /snap/bin/
 RUN chmod +x /snap/bin/snapcraft
 
 # Workaround for old buggy version of patchelf
-ADD https://github.com/NixOS/patchelf/releases/download/0.17.2/patchelf-0.17.2-x86_64.tar.gz /opt/patchelf/patchelf.tar.gz
+ADD https://github.com/NixOS/patchelf/releases/download/0.18.0/patchelf-0.18.0-x86_64.tar.gz /opt/patchelf/patchelf.tar.gz
 RUN cd /opt/patchelf && tar -xvf patchelf.tar.gz
-ENV ELF_PY=/snap/snapcraft/current/lib/python3.8/site-packages/snapcraft_legacy/internal/elf.py
+ENV ELF_PY=/snap/snapcraft/current/lib/python3.10/site-packages/snapcraft_legacy/internal/elf.py
 RUN echo 'def new_patch(self, *, elf_file):' >> ${ELF_PY} && \
     echo '    if elf_file.dependencies:' >> ${ELF_PY} && \
     echo '        rpath = self._get_rpath(elf_file)' >> ${ELF_PY} && \
