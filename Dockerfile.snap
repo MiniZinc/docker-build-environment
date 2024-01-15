@@ -43,20 +43,31 @@ RUN chmod +x /snap/bin/snapcraft
 # Workaround for old buggy version of patchelf
 ADD https://github.com/NixOS/patchelf/releases/download/0.18.0/patchelf-0.18.0-x86_64.tar.gz /opt/patchelf/patchelf.tar.gz
 RUN cd /opt/patchelf && tar -xvf patchelf.tar.gz
-ENV ELF_PY=/snap/snapcraft/current/lib/python3.10/site-packages/snapcraft_legacy/internal/elf.py
-RUN echo 'def new_patch(self, *, elf_file):' >> ${ELF_PY} && \
-    echo '    if elf_file.dependencies:' >> ${ELF_PY} && \
-    echo '        rpath = self._get_rpath(elf_file)' >> ${ELF_PY} && \
-    echo '        self._run_patchelf(' >> ${ELF_PY} && \
-    echo '            patchelf_args=["--force-rpath", "--set-rpath", rpath],' >> ${ELF_PY} && \
-    echo '            elf_file_path=elf_file.path' >> ${ELF_PY} && \
-    echo '        )' >> ${ELF_PY} && \
-    echo '    if elf_file.interp:' >> ${ELF_PY} && \
-    echo '        self._run_patchelf(' >> ${ELF_PY} && \
-    echo '            patchelf_args=["--set-interpreter", self._dynamic_linker],' >> ${ELF_PY} && \
-    echo '            elf_file_path=elf_file.path' >> ${ELF_PY} && \
-    echo '        )' >> ${ELF_PY} && \
-    echo 'Patcher.patch = new_patch' >> ${ELF_PY}
+RUN ln -s /snap/snapcraft/current/lib/python3.*/site-packages/snapcraft/elf/_patcher.py /opt/patchelf/_patcher.py
+RUN echo 'Patcher._old_run_patchelf = Patcher._run_patchelf' >> /opt/patchelf/_patcher.py && \
+    echo 'def new_run_patchelf(self, patchelf_args, elf_file_path):' >> /opt/patchelf/_patcher.py && \
+    echo '    done = False' >> /opt/patchelf/_patcher.py && \
+    echo '    try:' >> /opt/patchelf/_patcher.py && \
+    echo '        i = patchelf_args.index("--set-rpath")' >> /opt/patchelf/_patcher.py && \
+    echo '        self._old_run_patchelf(' >> /opt/patchelf/_patcher.py && \
+    echo '            patchelf_args=["--force-rpath", "--set-rpath", patchelf_args[i + 1]],' >> /opt/patchelf/_patcher.py && \
+    echo '            elf_file_path=elf_file_path' >> /opt/patchelf/_patcher.py && \
+    echo '        )' >> /opt/patchelf/_patcher.py && \
+    echo '        done = True' >> /opt/patchelf/_patcher.py && \
+    echo '    except ValueError:' >> /opt/patchelf/_patcher.py && \
+    echo '        pass' >> /opt/patchelf/_patcher.py && \
+    echo '    try:' >> /opt/patchelf/_patcher.py && \
+    echo '        i = patchelf_args.index("--set-interpreter")' >> /opt/patchelf/_patcher.py && \
+    echo '        self._old_run_patchelf(' >> /opt/patchelf/_patcher.py && \
+    echo '            patchelf_args=["--set-interpreter", patchelf_args[i + 1]],' >> /opt/patchelf/_patcher.py && \
+    echo '            elf_file_path=elf_file_path' >> /opt/patchelf/_patcher.py && \
+    echo '        )' >> /opt/patchelf/_patcher.py && \
+    echo '        done = True' >> /opt/patchelf/_patcher.py && \
+    echo '    except ValueError:' >> /opt/patchelf/_patcher.py && \
+    echo '        pass' >> /opt/patchelf/_patcher.py && \
+    echo '    if not done:' >> /opt/patchelf/_patcher.py && \
+    echo '        self._old_run_patchelf(patchelf_args=patchelf_args, elf_file_path=elf_file_path)' >> /opt/patchelf/_patcher.py && \
+    echo 'Patcher._run_patchelf = new_run_patchelf' >> /opt/patchelf/_patcher.py
 
 # Multi-stage build, only need the snaps from the builder. Copy them one at a
 # time so they can be cached.
