@@ -5,6 +5,7 @@ on:
     - cron: '0 0 * * 1'
   push:
     branches: ['develop']
+  workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
