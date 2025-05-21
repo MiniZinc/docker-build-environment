@@ -1,57 +1,57 @@
-ARG QT_VERSION=6.4.3
+ARG QT_VERSION=6.8.3
 
-FROM rockylinux/rockylinux:8 AS base 
+FROM rockylinux/rockylinux:9 AS base 
 
 RUN dnf install -y epel-release && \
-	dnf install --enablerepo=powertools -y \
-# Qt Requirement:
+	dnf install --enablerepo=crb -y \
+	# Qt Requirement:
 	alsa-lib \
 	ccache \
 	cmake \
-# Qt Requirement:
+	# Qt Requirement:
 	cups-libs \
-	gcc-toolset-12 \
-	gcc-toolset-12-gcc-c++ \
+	gcc-toolset-14 \
+	gcc-toolset-14-gcc-c++ \
 	file \
 	git \
-# Qt Requirement:
+	# Qt Requirement:
 	fontconfig \
-# Qt Requirement:
+	# Qt Requirement:
 	libxkbcommon-x11 \
-# Qt Requirement:
+	# Qt Requirement:
 	libXcomposite-devel \
-# Qt Requirement:
+	# Qt Requirement:
 	libXcursor-devel \
-# Qt Requirement:
+	# Qt Requirement:
 	libXi-devel \
-# Qt Requirement:
+	# Qt Requirement:
 	libXrandr-devel \
-# Qt Requirement:
+	# Qt Requirement:
 	libXtst-devel \
-# Qt Requirement:
+	# Qt Requirement:
 	mesa-libGL-devel \
-# Qt Requirement:
+	# Qt Requirement:
 	mysql-libs \
-# Qt Requirement:
+	# Qt Requirement:
 	postgresql-odbc \
-# Qt Requirement:
+	# Qt Requirement:
 	xcb-util-cursor \
-# Qt Requirement:
+	# Qt Requirement:
 	xcb-util-image \
-# Qt Requirement:
+	# Qt Requirement:
 	xcb-util-keysyms \
-# Qt Requirement:
+	# Qt Requirement:
 	xcb-util-renderutil \
-# Qt Requirement:
+	# Qt Requirement:
 	xcb-util-wm \
 	make \
 	ninja-build \
 	perl \
 	unzip \
 	zlib && dnf clean all -y && rm -rf /var/cache/dnf
-ENV BASH_ENV=/opt/rh/gcc-toolset-12/enable \
-	ENV=/opt/rh/gcc-toolset-12/enable \
-	PROMPT_COMMAND=". /opt/rh/gcc-toolset-12/enable"
+ENV BASH_ENV=/opt/rh/gcc-toolset-14/enable \
+	ENV=/opt/rh/gcc-toolset-14/enable \
+	PROMPT_COMMAND=". /opt/rh/gcc-toolset-14/enable"
 
 FROM base AS extract 
 ARG QT_VERSION
@@ -82,11 +82,11 @@ RUN chmod -R 755 /appimagetool
 
 ### Install Qt using aqt installer
 RUN dnf install -y \
-	python39 \
-	python39-devel \
-	python39-pip && dnf clean all -y && rm -rf /var/cache/dnf
-RUN pip3.9 install -U setuptools wheel
-RUN source /opt/rh/gcc-toolset-12/enable && pip3.9 install aqtinstall
+	python3.12 \
+	python3.12-devel \
+	python3.12-pip && dnf clean all -y && rm -rf /var/cache/dnf
+RUN pip3.12 install -U setuptools wheel
+RUN source /opt/rh/gcc-toolset-14/enable && pip3.12 install aqtinstall
 RUN aqt install-qt -O /qt linux desktop $QT_VERSION -m qtwebsockets
 
 FROM base
