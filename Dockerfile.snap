@@ -1,7 +1,7 @@
 ARG RISK=stable
-ARG UBUNTU=jammy
+ARG UBUNTU=noble
 
-FROM ubuntu:$UBUNTU as builder
+FROM ubuntu:$UBUNTU AS builder
 ARG RISK
 ARG UBUNTU
 RUN echo "Building snapcraft:$RISK in ubuntu:$UBUNTU"
@@ -10,15 +10,15 @@ RUN echo "Building snapcraft:$RISK in ubuntu:$UBUNTU"
 RUN apt-get update
 RUN apt-get dist-upgrade --yes
 RUN apt-get install --yes \
-      curl \
-      jq \
-      squashfs-tools
+    curl \
+    jq \
+    squashfs-tools
 
-# Grab the core22 snap (which snapcraft uses as a base) from the stable channel
+# Grab the core24 snap (which snapcraft uses as a base) from the stable channel
 # and unpack it in the proper place.
-RUN curl -L $(curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/core22' | jq '.download_url' -r) --output core22.snap
-RUN mkdir -p /snap/core22
-RUN unsquashfs -d /snap/core22/current core22.snap
+RUN curl -L $(curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/core24' | jq '.download_url' -r) --output core24.snap
+RUN mkdir -p /snap/core24
+RUN unsquashfs -d /snap/core24/current core24.snap
 
 # Grab the snapcraft snap from the $RISK channel and unpack it in the proper
 # place.
@@ -30,14 +30,18 @@ RUN unsquashfs -d /snap/snapcraft/current snapcraft.snap
 # the snapcraft snap:
 RUN unlink /snap/snapcraft/current/usr/bin/python3
 RUN ln -s /snap/snapcraft/current/usr/bin/python3.* /snap/snapcraft/current/usr/bin/python3
+RUN mkdir -p /snap/snapcraft/current/usr/lib/python3/dist-packages
 RUN echo /snap/snapcraft/current/lib/python3.*/site-packages >> /snap/snapcraft/current/usr/lib/python3/dist-packages/site-packages.pth
+RUN site_pkgs=$(echo /snap/snapcraft/current/lib/python3.*/site-packages) && \
+    ln -s /snap/snapcraft/current/share/snapcraft/extensions $site_pkgs/extensions && \
+    ln -s /snap/snapcraft/current/share/snapcraft/keyrings $site_pkgs/keyrings && \
+    ln -s /snap/snapcraft/current/share/snapcraft/schema $site_pkgs/schema
 
-# Create a snapcraft runner (TODO: move version detection to the core of
-# snapcraft).
+# Create a snapcraft runner
 RUN mkdir -p /snap/bin
 RUN echo "#!/bin/sh" > /snap/bin/snapcraft
 RUN snap_version="$(awk '/^version:/{print $2}' /snap/snapcraft/current/meta/snap.yaml | tr -d \')" && echo "export SNAP_VERSION=\"$snap_version\"" >> /snap/bin/snapcraft
-RUN echo 'exec "$SNAP/usr/bin/python3" "$SNAP/bin/snapcraft" "$@"' >> /snap/bin/snapcraft
+RUN echo 'exec "/snap/snapcraft/current/bin/python3" -m snapcraft "$@"' >> /snap/bin/snapcraft
 RUN chmod +x /snap/bin/snapcraft
 
 # Workaround for old buggy version of patchelf
@@ -72,7 +76,7 @@ RUN echo 'Patcher._old_run_patchelf = Patcher._run_patchelf' >> /opt/patchelf/_p
 # Multi-stage build, only need the snaps from the builder. Copy them one at a
 # time so they can be cached.
 FROM ubuntu:$UBUNTU
-COPY --from=builder /snap/core22 /snap/core22
+COPY --from=builder /snap/core24 /snap/core24
 COPY --from=builder /snap/snapcraft /snap/snapcraft
 COPY --from=builder /snap/bin/snapcraft /snap/bin/snapcraft
 COPY --from=builder /opt/patchelf/bin/patchelf /snap/snapcraft/current/bin
@@ -85,7 +89,5 @@ RUN apt-get update && apt-get dist-upgrade --yes && apt-get install --yes snapd 
 ENV LANG="en_US.UTF-8"
 ENV LANGUAGE="en_US:en"
 ENV LC_ALL="en_US.UTF-8"
-ENV PATH="/snap/bin:/snap/snapcraft/current/usr/bin:$PATH"
-ENV SNAP="/snap/snapcraft/current"
-ENV SNAP_NAME="snapcraft"
-ENV SNAP_ARCH="amd64"
+ENV PATH="/snap/snapcraft/current/libexec/snapcraft/:/snap/bin:$PATH"
+ENV SNAPCRAFT_BUILD_ENVIRONMENT=host
