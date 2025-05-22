@@ -79,7 +79,7 @@ FROM ubuntu:$UBUNTU
 COPY --from=builder /snap/core24 /snap/core24
 COPY --from=builder /snap/snapcraft /snap/snapcraft
 COPY --from=builder /snap/bin/snapcraft /snap/bin/snapcraft
-COPY --from=builder /opt/patchelf/bin/patchelf /snap/snapcraft/current/bin
+COPY --from=builder /opt/patchelf/bin/patchelf /snap/bin
 
 # Generate locale and install dependencies.
 RUN apt-get update && apt-get dist-upgrade --yes && apt-get install --yes snapd sudo locales && locale-gen en_US.UTF-8 && \
