@@ -69,7 +69,7 @@ RUN mv /squashfs-root /linuxdeploy-plugin-qt
 RUN chmod -R 755 /linuxdeploy-plugin-qt
 
 # appimagetool
-ADD https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage /opt/appimagetool.AppImage
+ADD https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage /opt/appimagetool.AppImage
 RUN chmod +x /opt/appimagetool.AppImage
 RUN /opt/appimagetool.AppImage --appimage-extract
 RUN rm -rf /opt/appimagetool.AppImage
